@@ -1,11 +1,9 @@
-from connectfour.agents.computer_player import RandomAgent
-import random
+from connectfour.agents.agent import Agent
 
-
-class StudentAgent(RandomAgent):
+class StudentAgent(Agent):
     def __init__(self, name):
         super().__init__(name)
-        self.MaxDepth = 1
+        self.MaxDepth = 4
 
     def get_move(self, board):
         """
@@ -123,9 +121,9 @@ class StudentAgent(RandomAgent):
                         value -= 10000
                 except IndexError:
                     pass
+                        
 
-        return value
-        
+
 
 
         """
@@ -159,5 +157,4 @@ class StudentAgent(RandomAgent):
             next_state(turn)
             winner()
         """
-
-        
+        return value
