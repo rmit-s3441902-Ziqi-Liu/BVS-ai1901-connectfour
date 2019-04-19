@@ -55,6 +55,79 @@ class StudentAgent(RandomAgent):
         return bestVal
 
     def evaluateBoardState(self, board):
+        value = 0
+        state = board.board
+        for i in range(board.width):
+            for j in range(board.height):
+                #check horizontal token
+                try:
+                    if state[i][j] == state[i+1][j] == int(self.id):
+                        value += 10
+                    if state[i][j] == state[i+1][j] == state[i+2][j] == int(self.id):
+                        value += 100
+                    if state[i][j] == state[i+1][j] == state[i+2][j] == state[i+3][j] == int(self.id):
+                        value += 10000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] != 0 :
+                        value -= 10
+                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] == state[i+2][j] != 0:
+                        value -= 1000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] == state[i+2][j] == state[i+3][j] != 0:
+                        value -= 10000
+                except IndexError:
+                    pass
+                
+                try:
+                    if state[i][j] == state[i][j+1] == int(self.id):
+                        value += 10
+                    if state[i][j] == state[i][j+1] == state[i][j+2] == int(self.id):
+                        value += 100
+                    if state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] == int(self.id):
+                        value += 10000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] != 0 :
+                        value -= 10
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2]!= 0:
+                        value -= 1000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] != 0:
+                        value -= 10000
+                except IndexError:
+                    pass
+                
+                try:
+                    if not j + 3  > board.height and state[i][j] == state[i+1][j+1] == int(self.id):
+                        value += 10
+                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == int(self.id):
+                        value += 100
+                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] == int(self.id):
+                        value += 10000
+                    if not j + 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] != 0:
+                        value -= 10
+                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] != 0:
+                        value -= 100
+                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] != 0:
+                        value -= 10000
+                except IndexError:
+                    pass
+
+                try:
+                    if not j - 3  > board.height and state[i][j] == state[i+1][j-1] == int(self.id):
+                        value += 10
+                    if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == int(self.id):
+                        value += 100
+                    if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] == int(self.id):
+                        value += 10000
+                    if not j - 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] != 0:
+                        value -= 10
+                    if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] != 0:
+                        value -= 100
+                    if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] != 0:
+                        value -= 10000
+                except IndexError:
+                    pass
+
+        return value
+        
+
+
         """
         Your evaluation function should look at the current state and return a score for it. 
         As an example, the random agent provided works as follows:
@@ -87,4 +160,4 @@ class StudentAgent(RandomAgent):
             winner()
         """
 
-        return random.uniform(0, 1)
+        
