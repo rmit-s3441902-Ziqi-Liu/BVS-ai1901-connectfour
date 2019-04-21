@@ -53,108 +53,57 @@ class StudentAgent(Agent):
         return bestVal
 
     def evaluateBoardState(self, board):
-        value = 0
+        score = 0
         state = board.board
-        for i in range(board.width):
-            for j in range(board.height):
-                #check horizontal token
-                try:
-                    if state[i][j] == state[i+1][j] == int(self.id):
-                        value += 10
-                    if state[i][j] == state[i+1][j] == state[i+2][j] == int(self.id):
-                        value += 100
-                    if state[i][j] == state[i+1][j] == state[i+2][j] == state[i+3][j] == int(self.id):
-                        value += 10000
-                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] != 0 :
-                        value -= 10
-                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] == state[i+2][j] != 0:
-                        value -= 1000
-                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] == state[i+2][j] == state[i+3][j] != 0:
-                        value -= 10000
-                except IndexError:
-                    pass
-                
-                try:
-                    if state[i][j] == state[i][j+1] == int(self.id):
-                        value += 10
-                    if state[i][j] == state[i][j+1] == state[i][j+2] == int(self.id):
-                        value += 100
-                    if state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] == int(self.id):
-                        value += 10000
-                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] != 0 :
-                        value -= 10
-                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2]!= 0:
-                        value -= 1000
-                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] != 0:
-                        value -= 10000
-                except IndexError:
-                    pass
-                
-                try:
-                    if not j + 3  > board.height and state[i][j] == state[i+1][j+1] == int(self.id):
-                        value += 10
-                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == int(self.id):
-                        value += 100
-                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] == int(self.id):
-                        value += 10000
-                    if not j + 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] != 0:
-                        value -= 10
-                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] != 0:
-                        value -= 100
-                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] != 0:
-                        value -= 10000
-                except IndexError:
-                    pass
 
-                try:
-                    if not j - 3  > board.height and state[i][j] == state[i+1][j-1] == int(self.id):
-                        value += 10
-                    if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == int(self.id):
-                        value += 100
-                    if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] == int(self.id):
-                        value += 10000
-                    if not j - 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] != 0:
-                        value -= 10
-                    if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] != 0:
-                        value -= 100
-                    if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] != 0:
-                        value -= 10000
-                except IndexError:
-                    pass
-                        
+        ## Score center column
+        center_array = [int(i) for i in list(state[:][board.width//2])]
+        center_count = center_array.count(int(self.id))
+        score += center_count * 3
 
+        ## Score Horizontal
+        for r in range(board.height):
+            row_array = [int(i) for i in list(state[r][:])]
+            for c in range(board.width-3):
+                window = row_array[c:c+4]
+                score += self.evaluate_window(window)
 
+        ## Score Vertical
+        for c in range(board.width-1):
+            col_array = [int(i) for i in list(state[:][c])]
+            for r in range(board.height-3):
+                window = col_array[r:r+4]
+                score += self.evaluate_window(window)
 
+        ## Score posiive sloped diagonal
+        for r in range(board.height-3):
+            for c in range(board.width-3):
+                window = [state[r+i][c+i] for i in range(4)]
+                score += self.evaluate_window(window)
 
-        """
-        Your evaluation function should look at the current state and return a score for it. 
-        As an example, the random agent provided works as follows:
-            If the opponent has won this game, return -1.
-            If we have won the game, return 1.
-            If neither of the players has won, return a random number.
-        """
+        for r in range(board.height-3):
+            for c in range(board.width-3):
+                window = [state[r+3-i][c+i] for i in range(4)]
+                score += self.evaluate_window(window)
 
-        """
-        These are the variables and functions for board objects which may be helpful when creating your Agent.
-        Look into board.py for more information/descriptions of each, or to look for any other definitions which may help you.
+        return score
 
-        Board Variables:
-            board.width 
-            board.height
-            board.last_move
-            board.num_to_connect
-            board.winning_zones
-            board.score_array 
-            board.current_player_score
+    def evaluate_window(self,window):
+        score = 0
+        piece = int(self.id)
 
-        Board Functions:
-            get_cell_value(row, col)
-            try_move(col)
-            valid_move(row, col)
-            valid_moves()
-            terminal(self)
-            legal_moves()
-            next_state(turn)
-            winner()
-        """
-        return value
+        opp_piece = 1
+        if piece == 1:
+            opp_piece = 2
+
+        if window.count(piece) == 4:
+            score += 100
+        elif window.count(piece) == 3 and window.count(0) == 1:
+            score += 5
+        elif window.count(piece) == 2 and window.count(0) == 2:
+            score += 2
+
+        if window.count(opp_piece) == 3 and window.count(0) == 1:
+            score -= 4
+
+        return score
