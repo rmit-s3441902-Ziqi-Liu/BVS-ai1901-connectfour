@@ -52,41 +52,80 @@ class StudentAgent(Agent):
 
         return bestVal
 
-    def evaluateBoardState(self, board):
-        score = 0
+def evaluateBoardState(self, board):
+    value = 0
         state = board.board
+        for i in range(board.width):
+            for j in range(board.height):
+                #check horizontal token
+                try:
+                    if state[i][j] == state[i+1][j] == int(self.id):
+                        value += 10
+                    if state[i][j] == state[i+1][j] == state[i+2][j] == int(self.id):
+                        value += 100
+                    if state[i][j] == state[i+1][j] == state[i+2][j] == state[i+3][j] == int(self.id):
+                        value += 10000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] != 0 :
+                        value -= 10
+                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] == state[i+2][j] != 0:
+                        value -= 1000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] == state[i+2][j] == state[i+3][j] != 0:
+                        value -= 10000
+                except IndexError:
+                    pass
+    for i in range(board.width):
+        for j in range(board.height):
+            try:
+                if state[i][j] == state[i][j+1] == int(self.id):
+                    value += 10
+                    if state[i][j] == state[i][j+1] == state[i][j+2] == int(self.id):
+                        value += 100
+                if state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] == int(self.id):
+                    value += 10000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] != 0 :
+                        value -= 10
+                if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2]!= 0:
+                    value -= 1000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] != 0:
+                        value -= 10000
+                        except IndexError:
+                        pass
+    for i in range(board.width):
+        for j in range(board.height):
+            try:
+                if not j + 3  > board.height and state[i][j] == state[i+1][j+1] == int(self.id):
+                    value += 10
+                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == int(self.id):
+                        value += 100
+                if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] == int(self.id):
+                    value += 10000
+                    if not j + 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] != 0:
+                        value -= 10
+                if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] != 0:
+                    value -= 100
+                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] != 0:
+                        value -= 10000
+                        except IndexError:
+                        pass
+for i in range(board.width):
+    for j in range(board.height):
+        try:
+            if not j - 3  > board.height and state[i][j] == state[i+1][j-1] == int(self.id):
+                value += 10
+                    if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == int(self.id):
+                        value += 100
+                if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] == int(self.id):
+                    value += 10000
+                    if not j - 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] != 0:
+                        value -= 10
+                if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] != 0:
+                    value -= 100
+                    if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] != 0:
+                        value -= 10000
+                        except IndexError:
+                        pass
+    return value
 
-        ## Score center column
-        center_array = [int(i) for i in list(state[:][board.width//2])]
-        center_count = center_array.count(int(self.id))
-        score += center_count * 3
-
-        ## Score Horizontal
-        for r in range(board.height):
-            row_array = [int(i) for i in list(state[r][:])]
-            for c in range(board.width-3):
-                window = row_array[c:c+4]
-                score += self.evaluate_window(window)
-
-        ## Score Vertical
-        for c in range(board.width-1):
-            col_array = [int(i) for i in list(state[:][c])]
-            for r in range(board.height-3):
-                window = col_array[r:r+4]
-                score += self.evaluate_window(window)
-
-        ## Score posiive sloped diagonal
-        for r in range(board.height-3):
-            for c in range(board.width-3):
-                window = [state[r+i][c+i] for i in range(4)]
-                score += self.evaluate_window(window)
-
-        for r in range(board.height-3):
-            for c in range(board.width-3):
-                window = [state[r+3-i][c+i] for i in range(4)]
-                score += self.evaluate_window(window)
-
-        return score
 
     def evaluate_window(self,window):
         score = 0
