@@ -54,9 +54,9 @@ class StudentAgent(Agent):
 
 def evaluateBoardState(self, board):
     value = 0
-        state = board.board
-        for i in range(board.width):
-            for j in range(board.height):
+    state = board.board
+    for i in range(board.width):
+        for j in range(board.height):
                 #check horizontal token
                 try:
                     if state[i][j] == state[i+1][j] == int(self.id):
@@ -71,60 +71,60 @@ def evaluateBoardState(self, board):
                         value -= 1000
                     if state[i][j] != int(self.id) and state[i][j] == state[i+1][j] == state[i+2][j] == state[i+3][j] != 0:
                         value -= 10000
-                except IndexError:
+                    except IndexError:
+                    pass
+    for i in range(board.width):
+        for j in range(board.height):
+                try:
+                    if state[i][j] == state[i][j+1] == int(self.id):
+                    value += 10
+                    if state[i][j] == state[i][j+1] == state[i][j+2] == int(self.id):
+                        value += 100
+                    if state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] == int(self.id):
+                    value += 10000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] != 0 :
+                        value -= 10
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2]!= 0:
+                    value -= 1000
+                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] != 0:
+                        value -= 10000
+                    except IndexError:
+                    pass
+    for i in range(board.width):
+        for j in range(board.height):
+                try:
+                    if not j + 3  > board.height and state[i][j] == state[i+1][j+1] == int(self.id):
+                    value += 10
+                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == int(self.id):
+                        value += 100
+                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] == int(self.id):
+                    value += 10000
+                    if not j + 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] != 0:
+                        value -= 10
+                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] != 0:
+                    value -= 100
+                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] != 0:
+                        value -= 10000
+                    except IndexError:
                     pass
     for i in range(board.width):
         for j in range(board.height):
             try:
-                if state[i][j] == state[i][j+1] == int(self.id):
+                    if not j - 3  > board.height and state[i][j] == state[i+1][j-1] == int(self.id):
                     value += 10
-                    if state[i][j] == state[i][j+1] == state[i][j+2] == int(self.id):
-                        value += 100
-                if state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] == int(self.id):
-                    value += 10000
-                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] != 0 :
-                        value -= 10
-                if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2]!= 0:
-                    value -= 1000
-                    if state[i][j] != int(self.id) and state[i][j] == state[i][j+1] == state[i][j+2] == state[i][j+3] != 0:
-                        value -= 10000
-                        except IndexError:
-                        pass
-    for i in range(board.width):
-        for j in range(board.height):
-            try:
-                if not j + 3  > board.height and state[i][j] == state[i+1][j+1] == int(self.id):
-                    value += 10
-                    if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == int(self.id):
-                        value += 100
-                if not j + 3 > board.height and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] == int(self.id):
-                    value += 10000
-                    if not j + 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] != 0:
-                        value -= 10
-                if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] != 0:
-                    value -= 100
-                    if not j + 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j+1] == state[i+2][j+2] == state[i+3][j+3] != 0:
-                        value -= 10000
-                        except IndexError:
-                        pass
-for i in range(board.width):
-    for j in range(board.height):
-        try:
-            if not j - 3  > board.height and state[i][j] == state[i+1][j-1] == int(self.id):
-                value += 10
                     if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == int(self.id):
                         value += 100
-                if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] == int(self.id):
+                    if not j - 3 > board.height and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] == int(self.id):
                     value += 10000
                     if not j - 3  > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] != 0:
                         value -= 10
-                if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] != 0:
+                    if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] != 0:
                     value -= 100
                     if not j - 3 > board.height and state[i][j] != int(self.id) and state[i][j] == state[i+1][j-1] == state[i+2][j-2] == state[i+3][j-3] != 0:
                         value -= 10000
-                        except IndexError:
-                        pass
-    return value
+                    except IndexError:
+                    pass
+        return value
 
 
     def evaluate_window(self,window):
