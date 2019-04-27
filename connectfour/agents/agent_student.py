@@ -55,25 +55,30 @@ class StudentAgent(Agent):
     def evaluateBoardState(self, board):
         score = 0
         state = board.board
-
+        center_array = []
+        col_array = []
         ## Score center column
-        center_array = [int(i) for i in list(state[:][board.width//2])]
-        center_count = center_array.count(int(self.id))
-        score += center_count * 3
+        for e in range(board.height):
+            center_array.append(state[e][board.width//2])
+            center_count = center_array.count(int(self.id))
+            score += center_count * 3
 
-        ## Score Horizontal
-        for r in range(board.height):
-            row_array = [int(i) for i in list(state[r][:])]
+        # Score Horizontal
+        for each in state:
+            row_array = each 
             for c in range(board.width-3):
                 window = row_array[c:c+4]
                 score += self.evaluate_window(window)
 
-        ## Score Vertical
-        for c in range(board.width-1):
-            col_array = [int(i) for i in list(state[:][c])]
-            for r in range(board.height-3):
-                window = col_array[r:r+4]
+        # Score Vertical
+        for x in range(board.width):
+            for y in range(board.height):
+                col_array.append(state[y][x])
+            for z in range(board.height-3):
+                window = col_array[z:z+4]
                 score += self.evaluate_window(window)
+            col_array = []
+
 
         ## Score posiive sloped diagonal
         for r in range(board.height-3):
@@ -91,11 +96,11 @@ class StudentAgent(Agent):
     def evaluate_window(self,window):
         score = 0
         piece = int(self.id)
-
         opp_piece = 1
+        
         if piece == 1:
             opp_piece = 2
-
+        
         if window.count(piece) == 4:
             score += 100
         elif window.count(piece) == 3 and window.count(0) == 1:
@@ -103,7 +108,9 @@ class StudentAgent(Agent):
         elif window.count(piece) == 2 and window.count(0) == 2:
             score += 2
 
-        if window.count(opp_piece) == 3 and window.count(0) == 1:
+        if window.count(opp_piece) == 4:
+            score -= 100
+        elif window.count(opp_piece) == 3 and window.count(0) == 1:
             score -= 4
 
         return score
